@@ -1,0 +1,168 @@
+//kage:unit pixels
+
+package main
+
+var NeighborhoodRange int
+var Threshold float
+var States float
+var Neighborhood int
+var Cursor vec2
+var Time float
+var BrushRadius float
+var BrushValue float
+var BrushNoise int
+
+func Fragment(_ vec4, srcCoord vec2, _ vec4) vec4 {
+
+    offset := 0.5
+
+    // random state cursor brush
+    if length(srcCoord - Cursor) < BrushRadius {
+        if BrushNoise == 1 {
+        var rnd float = fract(sin(dot(srcCoord, vec2(12.9898, 78.233)) + Time) * 43758.5453)
+        return vec4(rnd, rnd, rnd, 1.0)
+        } else {
+        return vec4(BrushValue, BrushValue, BrushValue, 1.0)
+        }
+    }
+
+
+    var current float = floor(imageSrc0At(srcCoord).r * States + offset)
+    var next float = mod(current + 1.0, States)
+    var count float = 0.0
+
+    var res vec2 = imageSrc0Size()
+
+    // Moore (Neighborhood == 0)
+    if Neighborhood == 0 {
+        if NeighborhoodRange == 1 {
+            for dy := -1; dy <= 1; dy++ {
+                for dx := -1; dx <= 1; dx++ {
+                    if dx == 0 && dy == 0 { continue }
+                    var neighborPos vec2 = mod(srcCoord + vec2(float(dx), float(dy)), res)
+                    var neighborState float = floor(imageSrc0At(neighborPos).r * States + offset)
+                    if neighborState == next {
+                        count += 1.0
+                    }
+                }
+            }
+        } else if NeighborhoodRange == 2 {
+            for dy := -2; dy <= 2; dy++ {
+                for dx := -2; dx <= 2; dx++ {
+                    if dx == 0 && dy == 0 { continue }
+                    var neighborPos vec2 = mod(srcCoord + vec2(float(dx), float(dy)), res)
+                    var neighborState float = floor(imageSrc0At(neighborPos).r * States + offset)
+                    if neighborState == next {
+                        count += 1.0
+                    }
+                }
+            }
+        } else if NeighborhoodRange == 3 {
+            for dy := -3; dy <= 3; dy++ {
+                for dx := -3; dx <= 3; dx++ {
+                    if dx == 0 && dy == 0 { continue }
+                    var neighborPos vec2 = mod(srcCoord + vec2(float(dx), float(dy)), res)
+                    var neighborState float = floor(imageSrc0At(neighborPos).r * States + offset)
+                    if neighborState == next {
+                        count += 1.0
+                    }
+                }
+            }
+        } else if NeighborhoodRange == 4 {
+            for dy := -4; dy <= 4; dy++ {
+                for dx := -4; dx <= 4; dx++ {
+                    if dx == 0 && dy == 0 { continue }
+                    var neighborPos vec2 = mod(srcCoord + vec2(float(dx), float(dy)), res)
+                    var neighborState float = floor(imageSrc0At(neighborPos).r * States + offset)
+                    if neighborState == next {
+                        count += 1.0
+                    }
+                }
+            }
+        } else if NeighborhoodRange == 5 {
+            for dy := -5; dy <= 5; dy++ {
+                for dx := -5; dx <= 5; dx++ {
+                    if dx == 0 && dy == 0 { continue }
+                    var neighborPos vec2 = mod(srcCoord + vec2(float(dx), float(dy)), res)
+                    var neighborState float = floor(imageSrc0At(neighborPos).r * States + offset)
+                    if neighborState == next {
+                        count += 1.0
+                    }
+                }
+            }
+        }
+    }
+
+    // Neumann (Neighborhood == 1)
+    if Neighborhood == 1 {
+        if NeighborhoodRange == 1 {
+            for dy := -1; dy <= 1; dy++ {
+                for dx := -1; dx <= 1; dx++ {
+                    if (abs(float(dx)) + abs(float(dy)) > 1) || (dx == 0 && dy == 0) { continue }
+                    var neighborPos vec2 = mod(srcCoord + vec2(float(dx), float(dy)), res)
+                    var neighborState float = floor(imageSrc0At(neighborPos).r * States + offset)
+                    if neighborState == next {
+                        count += 1.0
+                    }
+                }
+            }
+        } else if NeighborhoodRange == 2 {
+            for dy := -2; dy <= 2; dy++ {
+                for dx := -2; dx <= 2; dx++ {
+                    if (abs(float(dx)) + abs(float(dy)) > 2) || (dx == 0 && dy == 0) { continue }
+                    var neighborPos vec2 = mod(srcCoord + vec2(float(dx), float(dy)), res)
+                    var neighborState float = floor(imageSrc0At(neighborPos).r * States + offset)
+                    if neighborState == next {
+                        count += 1.0
+                    }
+                }
+            }
+        } else if NeighborhoodRange == 3 {
+            for dy := -3; dy <= 3; dy++ {
+                for dx := -3; dx <= 3; dx++ {
+                    if (abs(float(dx)) + abs(float(dy)) > 3) || (dx == 0 && dy == 0) { continue }
+                    var neighborPos vec2 = mod(srcCoord + vec2(float(dx), float(dy)), res)
+                    var neighborState float = floor(imageSrc0At(neighborPos).r * States + offset)
+                    if neighborState == next {
+                        count += 1.0
+                    }
+                }
+            }
+        } else if NeighborhoodRange == 4 {
+            for dy := -4; dy <= 4; dy++ {
+                for dx := -4; dx <= 4; dx++ {
+                    if (abs(float(dx)) + abs(float(dy)) > 4) || (dx == 0 && dy == 0) { continue }
+                    var neighborPos vec2 = mod(srcCoord + vec2(float(dx), float(dy)), res)
+                    var neighborState float = floor(imageSrc0At(neighborPos).r * States + offset)
+                    if neighborState == next {
+                        count += 1.0
+                    }
+                }
+            }
+        } else if NeighborhoodRange == 5 {
+            for dy := -5; dy <= 5; dy++ {
+                for dx := -5; dx <= 5; dx++ {
+                    if (abs(float(dx)) + abs(float(dy)) > 5) || (dx == 0 && dy == 0) { continue }
+                    var neighborPos vec2 = mod(srcCoord + vec2(float(dx), float(dy)), res)
+                    var neighborState float = floor(imageSrc0At(neighborPos).r * States + offset)
+                    if neighborState == next {
+                        count += 1.0
+                    }
+                }
+            }
+        }
+    }
+
+    // Sonuç durumuna göre seçim
+    var newState float
+    if count >= Threshold {
+        newState = next
+    } else {
+        newState = current
+    }
+
+    // Normalizasyon ve sınır kontrolü
+    var out float = newState / States
+    out = clamp(out, 0.0, 1.0)
+    return vec4(out, out, out, 1.0)
+}
