@@ -1,4 +1,4 @@
-## Cyclic Cellular Autamaton Explorer (CCAE)
+## Cyclic Cellular Automaton Explorer (CCAE)
 
 ![ccae_screen](https://github.com/user-attachments/assets/ddfa7993-fd80-4e1f-bf4a-2f7a178a5ccf)
 
