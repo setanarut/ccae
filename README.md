@@ -1,5 +1,9 @@
 ## Cyclic Cellular Autamaton Explorer (CCAE)
 
+![ccae_screen](https://github.com/user-attachments/assets/ddfa7993-fd80-4e1f-bf4a-2f7a178a5ccf)
+
+Online app -> https://setanarut.github.io/ccae
+
 This table presents a collection of cyclic cellular automaton rules
 along with their creators and rule notations. Each entry follows
 the format `Range/Threshold/States/Neighborhood`, where:
