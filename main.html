@@ -1,8 +1,65 @@
 <!DOCTYPE html>
-<script src="wasm_exec.js"></script>
-<script>
-const go = new Go();
-WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(result => {
-    go.run(result.instance);
-});
-</script>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Loading</title>
+    <style>
+        #progress-container {
+            width: 300px;
+            height: 20px;
+            background: #000000;
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0;
+            background: #5f5f5f;
+        }
+
+        #progress-label {
+            display: none;
+        }
+    </style>
+    <script src="wasm_exec.js"></script>
+</head>
+
+<body>
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+    <script>
+        const go = new Go();
+        const progressBar = document.getElementById('progress-bar');
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'main.wasm', true);
+        xhr.responseType = 'arraybuffer';
+
+        xhr.onprogress = function (event) {
+            if (event.lengthComputable) {
+                const percent = Math.round((event.loaded / event.total) * 100);
+                progressBar.style.width = percent + '%';
+            }
+        };
+
+        xhr.onload = async function () {
+            progressBar.style.width = '100%';
+            const result = await WebAssembly.instantiate(xhr.response, go.importObject);
+            document.getElementById('progress-container').style.display = 'none';
+            go.run(result.instance);
+        };
+
+        xhr.onerror = function () {
+            console.error('Yükleme hatası!');
+        };
+
+        xhr.send();
+    </script>
+</body>
+
+</html>
